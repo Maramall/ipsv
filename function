@@ -1,0 +1,3 @@
+def center_v_centre
+  if center == (160, 120):
+    true
