@@ -1,0 +1,32 @@
+import cv2
+import numpy as np
+import pymurapi as mur
+auv = mur.mur_init()
+def noth(x):
+    print (x)
+chmax = 255
+cv2.namedWindow("Bin")
+cv2.createTrackbar('hmin','Bin' ,0, chmax, noth)
+cv2.createTrackbar('hmax','Bin' ,0, chmax, noth)
+cv2.createTrackbar('smin','Bin' ,0, chmax, noth)
+cv2.createTrackbar('smax','Bin' ,0, chmax, noth)
+cv2.createTrackbar('vmin','Bin' ,0, chmax, noth)
+cv2.createTrackbar('vmax','Bin' ,0, chmax, noth)
+   
+   
+while True:
+   dt = np.dtype(int)
+   image = auv.get_image_bottom() 
+   cv2.imshow('Image', image)
+   hmin = cv2.getTrackbarPos('hmin','Bin')
+   hmax = cv2.getTrackbarPos('hmax','Bin')
+   smin = cv2.getTrackbarPos('smin','Bin')
+   smax = cv2.getTrackbarPos('smax','Bin')
+   vmin = cv2.getTrackbarPos('vmin','Bin')
+   vmax = cv2.getTrackbarPos('vmax','Bin')
+   cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+   lower = np.array((hmin, smin, vmin), dt)
+   upper = np.array((hmax, smax, vmax), dt)
+   mask = cv2.inRange(image, lower, upper, image)
+   cv2.imshow('Bin', mask)
+   cv2.waitKey(10)
